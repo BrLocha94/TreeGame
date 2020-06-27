@@ -21,7 +21,7 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
-        CreateNewTree();
+        //CreateNewTree();
     }
 
     void Update()
@@ -35,6 +35,8 @@ public class GameController : MonoBehaviour
                 CreateNewTree();
             }
         }
+        else if (Input.GetKeyDown(KeyCode.S))
+            CreateNewTree();
     }
 
     private void CreateNewTree()
@@ -47,6 +49,7 @@ public class GameController : MonoBehaviour
         trees.Add(newTree);
         trees[trees.Count - 1].SetTree(randomHeight, spawController.GetSpawPosition());
 
+        /*
         if (hasSettedTarget == false)
         {
             CameraController.instance.SetInitialTarget(newTree.transform.position);
@@ -54,6 +57,6 @@ public class GameController : MonoBehaviour
         }
         else
             CameraController.instance.SetNextTarget(newTree.transform.position);
-
+        */
     }
 }

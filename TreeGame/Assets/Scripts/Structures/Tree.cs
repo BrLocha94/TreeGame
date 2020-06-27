@@ -20,13 +20,23 @@ public class Tree : MonoBehaviour
     [SerializeField]
     private List<Trunk> trunks = new List<Trunk>();
 
+    private Vector3 position;
     private float prefabHeight = 0;
 
     bool canColapse = true;
 
+    private void Awake()
+    {
+        anim = GetComponent<Animator>();
+    }
+
     public void SetTree(int height, Vector3 position)
     {
-        Vector3 lastPosition = new Vector3(0f, 0f, 0f);
+        this.position = position;
+
+        //gameObject.transform.position = position;
+
+        Vector3 lastPosition = gameObject.transform.position;
 
         this.height = height;
 
@@ -39,7 +49,11 @@ public class Tree : MonoBehaviour
 
             float diference = prefabHeight;
             if (i == 0)
+            {
                 diference = 0;
+                transform.position = new Vector3(transform.position.x, prefabHeight / 2, transform.position.z);
+                lastPosition = transform.position;
+            }
 
             trunks[i].transform.position = new Vector3(lastPosition.x, lastPosition.y + diference, lastPosition.z);
             lastPosition = trunks[i].transform.position;
@@ -47,9 +61,52 @@ public class Tree : MonoBehaviour
             trunks[i].gameObject.transform.SetParent(trunksParent);
         }
 
+        RandomAnimation();
+    }
+
+    private void RandomAnimation()
+    {
+        gameObject.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
+
         gameObject.transform.position = position;
 
-        //gameObject.transform.Translate(0f, 5.5f, 0f);
+        anim.Play("InitialTree");
+    }
+
+    IEnumerator DebugRoutine(int height, Vector3 position)
+    {
+        gameObject.transform.position = position;
+
+        Debug.Log(gameObject.transform.position);
+
+        Vector3 lastPosition = gameObject.transform.position;
+
+        this.height = height;
+
+        for (int i = 0; i < height; i++)
+        {
+            yield return new WaitForSeconds(0.5f);
+
+            trunks.Add(Pool.instance.GetAvaliablePrefab());
+
+            if (prefabHeight == 0)
+                prefabHeight = trunks[i].GetComponent<Renderer>().bounds.size.y;
+
+            float diference = prefabHeight;
+            if (i == 0)
+            {
+                diference = 0;
+                transform.position = new Vector3(transform.position.x, prefabHeight/2, transform.position.z);
+                lastPosition = transform.position;
+            }
+
+            trunks[i].transform.position = new Vector3(lastPosition.x, lastPosition.y + diference, lastPosition.z);
+            lastPosition = trunks[i].transform.position;
+
+            yield return new WaitForSeconds(0.5f);
+
+            trunks[i].gameObject.transform.SetParent(trunksParent);
+        }
     }
 
     public bool DestroyTrunk()
