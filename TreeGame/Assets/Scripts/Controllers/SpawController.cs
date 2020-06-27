@@ -6,10 +6,10 @@ public class SpawController : MonoBehaviour
 {
     [Header("Range in Z axis on vector used to spaw new trees")]
     [SerializeField]
-    [Range(1f, 10f)]
+    [Range(50f, 200f)]
     private float radius;
     [Header("Range in X axis on vector used to spaw new trees")]
-    [Range(1f, 4f)]
+    [Range(50f, 84f)]
     [SerializeField]
     private float range;
 

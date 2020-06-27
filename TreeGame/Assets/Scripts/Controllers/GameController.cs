@@ -20,7 +20,19 @@ public class GameController : MonoBehaviour
     void Start()
     {
         CreateNewTree();
-        CreateNewTree();
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            bool result = trees[0].DestroyTrunk();
+            if (result == true)
+            {
+                trees.RemoveAt(0);
+                CreateNewTree();
+            }
+        }
     }
 
     private void CreateNewTree()
