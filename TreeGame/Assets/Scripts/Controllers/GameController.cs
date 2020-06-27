@@ -15,6 +15,8 @@ public class GameController : MonoBehaviour
     [Range(7, 20)]
     private int heightRange;
 
+    bool hasSettedTarget = false;
+
     List<Tree> trees = new List<Tree>();
 
     void Start()
@@ -39,7 +41,19 @@ public class GameController : MonoBehaviour
     {
         int randomHeight = Random.Range(7, heightRange);
 
-        trees.Add(Instantiate(treePrefab));
+        Vector3 newPosition = spawController.GetSpawPosition();
+        Tree newTree = Instantiate(treePrefab);
+
+        trees.Add(newTree);
         trees[trees.Count - 1].SetTree(randomHeight, spawController.GetSpawPosition());
+
+        if (hasSettedTarget == false)
+        {
+            CameraController.instance.SetInitialTarget(newTree.transform.position);
+            hasSettedTarget = true;
+        }
+        else
+            CameraController.instance.SetNextTarget(newTree.transform.position);
+
     }
 }

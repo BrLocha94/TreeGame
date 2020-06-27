@@ -49,7 +49,7 @@ public class Tree : MonoBehaviour
 
         gameObject.transform.position = position;
 
-        gameObject.transform.Translate(0f, 5.5f, 0f);
+        //gameObject.transform.Translate(0f, 5.5f, 0f);
     }
 
     public bool DestroyTrunk()
