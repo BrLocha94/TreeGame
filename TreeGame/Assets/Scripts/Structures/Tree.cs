@@ -70,7 +70,14 @@ public class Tree : MonoBehaviour
 
         gameObject.transform.position = position;
 
-        anim.Play("InitialTree");
+        int random = Random.Range(0, 3);
+
+        if (random == 0)
+            anim.Play("Bounce");
+        else if (random == 1)
+            anim.Play("Smooth");
+        else
+            anim.Play("Pop");
     }
 
     IEnumerator DebugRoutine(int height, Vector3 position)
