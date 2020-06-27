@@ -165,7 +165,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   radius: 50
-  range: 50
+  range: 84
 --- !u!1 &476714566
 GameObject:
   m_ObjectHideFlags: 0
@@ -198,7 +198,7 @@ MonoBehaviour:
   spawController: {fileID: 238373444}
   treePrefab: {fileID: 6063173911304331448, guid: dae3471c1e975404aa06fd20a8d20356,
     type: 3}
-  heightRange: 15
+  heightRange: 17
 --- !u!4 &476714568
 Transform:
   m_ObjectHideFlags: 0
@@ -355,7 +355,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movimentSpeed: 1
-  distanceFromTraget: 10
+  distanceFromTarget: 40
 --- !u!1 &1282028642
 GameObject:
   m_ObjectHideFlags: 0

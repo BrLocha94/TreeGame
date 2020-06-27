@@ -12,10 +12,8 @@ public class GameController : MonoBehaviour
     [SerializeField]
     private Tree treePrefab;
     [SerializeField]
-    [Range(7, 20)]
+    [Range(10, 20)]
     private int heightRange;
-
-    bool hasSettedTarget = false;
 
     List<Tree> trees = new List<Tree>();
 
@@ -43,20 +41,11 @@ public class GameController : MonoBehaviour
     {
         int randomHeight = Random.Range(7, heightRange);
 
-        Vector3 newPosition = spawController.GetSpawPosition();
         Tree newTree = Instantiate(treePrefab);
 
         trees.Add(newTree);
         trees[trees.Count - 1].SetTree(randomHeight, spawController.GetSpawPosition());
 
-        /*
-        if (hasSettedTarget == false)
-        {
-            CameraController.instance.SetInitialTarget(newTree.transform.position);
-            hasSettedTarget = true;
-        }
-        else
-            CameraController.instance.SetNextTarget(newTree.transform.position);
-        */
+        CameraController.instance.SetNextTarget(newTree.transform.position);
     }
 }

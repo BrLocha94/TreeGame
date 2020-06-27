@@ -32,7 +32,10 @@ public class SpawController : MonoBehaviour
     private void SetNextSpawPosition()
     {
         //Unity range exclude last param
-        int random = Random.Range(-1, 2);
+        int random = Random.Range(0, 2);
+
+        if (random == 0)
+            random = -1;
 
         baseposition = new Vector3(baseposition.x + (range / 2) * random, baseposition.y, baseposition.z + radius);
     }
