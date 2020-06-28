@@ -14,38 +14,46 @@ public class GameController : MonoBehaviour
     [SerializeField]
     [Range(10, 20)]
     private int heightRange;
+    [SerializeField]
+    private int spawLimit;
 
-    List<Tree> trees = new List<Tree>();
+    [Header("Round controll params")]
+    [SerializeField]
+    private int treeLimitPerRound;
 
-    void Start()
+    List<Tree> listTrees = new List<Tree>();
+    Tree targetTree;
+
+    public void DestroyTrunk()
     {
-        //CreateNewTree();
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.A))
+        if (targetTree != null)
         {
-            bool result = trees[0].DestroyTrunk();
+            bool result = targetTree.DestroyTrunk();
             if (result == true)
             {
-                trees.RemoveAt(0);
+                Tree tree = listTrees[0];
+                listTrees.RemoveAt(0);
+                tree.DestroyTree();
                 CreateNewTree();
             }
         }
-        else if (Input.GetKeyDown(KeyCode.S))
-            CreateNewTree();
     }
 
-    private void CreateNewTree()
+    public void CreateNewTree()
     {
         int randomHeight = Random.Range(7, heightRange);
 
-        Tree newTree = Instantiate(treePrefab);
+        targetTree = Instantiate(treePrefab);
+        listTrees.Add(targetTree);
+        listTrees[listTrees.Count - 1].SetTree(randomHeight, spawController.GetSpawPosition());
 
-        trees.Add(newTree);
-        trees[trees.Count - 1].SetTree(randomHeight, spawController.GetSpawPosition());
+        CameraController.instance.SetNextTarget(targetTree.transform.position);
 
-        CameraController.instance.SetNextTarget(newTree.transform.position);
+        if (listTrees.Count > spawLimit)
+        {
+            Tree tree = listTrees[0];
+            listTrees.RemoveAt(0);
+            tree.DestroyTree();
+        }
     }
 }

@@ -18,7 +18,7 @@ public class Tree : MonoBehaviour
     [SerializeField]
     private int height;
     [SerializeField]
-    private List<Trunk> trunks = new List<Trunk>();
+    private List<Trunk> listTrunk = new List<Trunk>();
 
     private Vector3 position;
     private float prefabHeight = 0;
@@ -34,18 +34,16 @@ public class Tree : MonoBehaviour
     {
         this.position = position;
 
-        //gameObject.transform.position = position;
-
         Vector3 lastPosition = gameObject.transform.position;
 
         this.height = height;
 
         for (int i = 0; i < height; i++)
         {
-            trunks.Add(Pool.instance.GetAvaliablePrefab());
+            listTrunk.Add(Pool.instance.GetAvaliablePrefab());
 
             if (prefabHeight == 0)
-                prefabHeight = trunks[i].GetComponent<Renderer>().bounds.size.y;
+                prefabHeight = listTrunk[i].GetComponent<Renderer>().bounds.size.y;
 
             float diference = prefabHeight;
             if (i == 0)
@@ -55,10 +53,10 @@ public class Tree : MonoBehaviour
                 lastPosition = transform.position;
             }
 
-            trunks[i].transform.position = new Vector3(lastPosition.x, lastPosition.y + diference, lastPosition.z);
-            lastPosition = trunks[i].transform.position;
+            listTrunk[i].transform.position = new Vector3(lastPosition.x, lastPosition.y + diference, lastPosition.z);
+            lastPosition = listTrunk[i].transform.position;
 
-            trunks[i].gameObject.transform.SetParent(trunksParent);
+            listTrunk[i].gameObject.transform.SetParent(trunksParent);
         }
 
         RandomAnimation();
@@ -80,40 +78,16 @@ public class Tree : MonoBehaviour
             anim.Play("Pop");
     }
 
-    IEnumerator DebugRoutine(int height, Vector3 position)
+    public void DestroyTree()
     {
-        gameObject.transform.position = position;
-
-        Debug.Log(gameObject.transform.position);
-
-        Vector3 lastPosition = gameObject.transform.position;
-
-        this.height = height;
-
-        for (int i = 0; i < height; i++)
+        while(listTrunk.Count > 0)
         {
-            yield return new WaitForSeconds(0.5f);
-
-            trunks.Add(Pool.instance.GetAvaliablePrefab());
-
-            if (prefabHeight == 0)
-                prefabHeight = trunks[i].GetComponent<Renderer>().bounds.size.y;
-
-            float diference = prefabHeight;
-            if (i == 0)
-            {
-                diference = 0;
-                transform.position = new Vector3(transform.position.x, prefabHeight/2, transform.position.z);
-                lastPosition = transform.position;
-            }
-
-            trunks[i].transform.position = new Vector3(lastPosition.x, lastPosition.y + diference, lastPosition.z);
-            lastPosition = trunks[i].transform.position;
-
-            yield return new WaitForSeconds(0.5f);
-
-            trunks[i].gameObject.transform.SetParent(trunksParent);
+            Trunk trunk = listTrunk[0];
+            listTrunk.RemoveAt(0);
+            trunk.RemoveFromTree();
         }
+
+        Destroy(gameObject);
     }
 
     public bool DestroyTrunk()
@@ -121,15 +95,15 @@ public class Tree : MonoBehaviour
         //Wait for the coroutine to end for animate another process
         if (canColapse == false) return false;
 
-        if (trunks.Count > 0)
+        if (listTrunk.Count > 0)
         {
-            trunks[0].RemoveFromTree();
-            trunks.RemoveAt(0);
+            listTrunk[0].RemoveFromTree();
+            listTrunk.RemoveAt(0);
             canColapse = false;
             StartCoroutine(TreeColapsingRoutine());
         }
 
-        return trunks.Count == 0 ? true : false;
+        return listTrunk.Count == 0 ? true : false;
     }
 
     IEnumerator TreeColapsingRoutine()
@@ -144,7 +118,6 @@ public class Tree : MonoBehaviour
 
             yield return null;
         }
-
         canColapse = true;
 
         yield return null;
