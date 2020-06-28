@@ -23,7 +23,7 @@ public class Tree : MonoBehaviour
     private Vector3 position;
     private float prefabHeight = 0;
 
-    bool canColapse = true;
+    bool canColapse = false;
 
     private void Awake()
     {
@@ -76,6 +76,13 @@ public class Tree : MonoBehaviour
             anim.Play("Smooth");
         else
             anim.Play("Pop");
+
+        Invoke("StartTree", 1f);
+    }
+
+    private void StartTree()
+    {
+        canColapse = true;
     }
 
     public void DestroyTree()

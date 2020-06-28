@@ -14,6 +14,7 @@ public class SpawController : MonoBehaviour
     private float range;
 
     private Vector3 baseposition;
+    private Vector3 spawPosition;
 
     void Awake()
     {

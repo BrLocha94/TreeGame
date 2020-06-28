@@ -24,6 +24,47 @@ public class GameController : MonoBehaviour
     List<Tree> listTrees = new List<Tree>();
     Tree targetTree;
 
+    int countDown;
+
+    void Start()
+    {
+        RestartRound();
+    }
+
+    public void RestartRound()
+    {
+        VisualController.instance.ResetUI();
+
+        if(listTrees.Count > 0)
+        {
+            for(int i = 0; i < listTrees.Count; i++)
+            {
+                Tree tree = listTrees[0];
+                listTrees.RemoveAt(0);
+                tree.DestroyTree();
+            }
+
+            targetTree = null;
+        }
+
+        countDown = 3;
+
+        CreateNewTree();
+        InvokeRepeating("CountDown", 0, 1f);
+    }
+
+    private void CountDown()
+    {
+        if(countDown == 0)
+        {
+            CancelInvoke("CountDown");
+            VisualController.instance.StartRound();
+        }
+        VisualController.instance.SetCountDownTimer(countDown);
+
+        countDown--;
+    }
+
     public void DestroyTrunk()
     {
         if (targetTree != null)
