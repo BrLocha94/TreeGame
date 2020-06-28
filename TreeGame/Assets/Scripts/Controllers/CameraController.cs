@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+    [Header("Camera smooth moviment controll params")]
     [SerializeField]
     private float movimentSpeed;
-
     [SerializeField]
     private float distanceFromTarget;
 
     Vector3 target;
-
     Coroutine lastRoutine;
+
     public static CameraController instance;
 
     private void Awake()
@@ -30,6 +30,7 @@ public class CameraController : MonoBehaviour
         newX = target.x;
         newZ = target.z - distanceFromTarget;
 
+        // Preserve camera .y settings
         Vector3 newPosition = new Vector3(newX, transform.position.y, newZ);
 
         lastRoutine = StartCoroutine(CameraMoveRoutine(newPosition));

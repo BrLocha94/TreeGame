@@ -11,17 +11,17 @@ public class Tree : MonoBehaviour
     [SerializeField]
     private Transform trunksParent;
 
+    [Header("General tree presets")]
     [SerializeField]
     private float animationTime = 1f;
-
-    [Header("Avaliable in inspector to debug proposes")]
     [SerializeField]
-    private int height;
-    [SerializeField]
-    private List<Trunk> listTrunk = new List<Trunk>();
+    private int baseScore;
 
-    private Vector3 position;
-    private float prefabHeight = 0;
+    int height;
+    List<Trunk> listTrunk = new List<Trunk>();
+
+    Vector3 position;
+    float prefabHeight = 0;
 
     bool canColapse = false;
 
@@ -33,10 +33,9 @@ public class Tree : MonoBehaviour
     public void SetTree(int height, Vector3 position)
     {
         this.position = position;
+        this.height = height;
 
         Vector3 lastPosition = gameObject.transform.position;
-
-        this.height = height;
 
         for (int i = 0; i < height; i++)
         {
@@ -64,8 +63,8 @@ public class Tree : MonoBehaviour
 
     private void RandomAnimation()
     {
+        // Set the object to an predefined scale for clean grow animation performace 
         gameObject.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
-
         gameObject.transform.position = position;
 
         int random = Random.Range(0, 3);
@@ -77,7 +76,8 @@ public class Tree : MonoBehaviour
         else
             anim.Play("Pop");
 
-        Invoke("StartTree", 1f);
+        // Prevents Destroy trunk calls while tree is still on grow animation
+        Invoke("StartTree", 1.1f);
     }
 
     private void StartTree()
@@ -85,13 +85,19 @@ public class Tree : MonoBehaviour
         canColapse = true;
     }
 
-    public void DestroyTree()
+    public void DestroyTree(bool forceDestroy = false)
     {
+        if (listTrunk.Count == 0 && forceDestroy == false)
+        {
+            GameController.instance.AddScore(baseScore);
+            GameController.instance.CountTree();
+        }
+
         while(listTrunk.Count > 0)
         {
             Trunk trunk = listTrunk[0];
             listTrunk.RemoveAt(0);
-            trunk.RemoveFromTree();
+            trunk.RemoveFromTree(true);
         }
 
         Destroy(gameObject);
@@ -121,12 +127,13 @@ public class Tree : MonoBehaviour
 
         while (gameObject.transform.position.y > finalPosition)
         {
+            // Translate the tree with and speed based on the distance/time
+            // Time is based on and 60 fps performace
             gameObject.transform.Translate(0f, - prefabHeight / (animationTime * 60), 0f);
 
             yield return null;
         }
-        canColapse = true;
 
-        yield return null;
+        canColapse = true;
     }
 }

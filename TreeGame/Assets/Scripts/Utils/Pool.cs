@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Pooling strategy prevents unnecessary Instantiate and Destory Calls routines along the code
+// Those routines has an heavy cost in unity pipeline (Garbage collection operations) 
 public class Pool : MonoBehaviour
 {
     [SerializeField]
@@ -20,6 +22,7 @@ public class Pool : MonoBehaviour
     {
         instance = this;
 
+        // Create an prefab reservation in scene
         for(int i = 0; i < poolDepth; i++)
         {
             pool.Add(Instantiate(prefab));
@@ -29,6 +32,7 @@ public class Pool : MonoBehaviour
 
     public Trunk GetAvaliablePrefab()
     {
+        // Find if there is an unused prefab in reserve
         for(int i = 0; i < pool.Count; i++)
         {
             if (pool[i].gameObject.activeInHierarchy == false)
@@ -38,6 +42,7 @@ public class Pool : MonoBehaviour
             }
         }
 
+        // if not, expands the pool
         pool.Add(Instantiate(prefab));
 
         return pool[pool.Count - 1];

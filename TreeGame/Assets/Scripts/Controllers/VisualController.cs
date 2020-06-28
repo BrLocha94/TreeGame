@@ -25,18 +25,13 @@ public class VisualController : MonoBehaviour
         instance = this;
     }
 
-    public void GameOver(int score)
-    {
-
-    }
-
-    public void ResetUI()
+    public void ResetUI(int roundTime)
     {
         fume.SetActive(true);
 
         countDown.text = "";
         score.text = "Score: 0";
-        time.text = "Time: 00:00:00";
+        UpdateTimeValue(roundTime);
     }
 
     public void StartRound()
@@ -54,8 +49,14 @@ public class VisualController : MonoBehaviour
         score.text = "Score: " + value.ToString();
     }
 
-    public void UpdateTimeValue(float time)
+    public void UpdateTimeValue(float value)
     {
+        int minutes = Mathf.FloorToInt(value / 60f);
+        int seconds = Mathf.FloorToInt(value - minutes * 60);
+        int hundredth = Mathf.FloorToInt((value * 100) % 100);
 
+        string curTime = string.Format("Time: " + "{0:0}:{1:00}:{2:00}", minutes, seconds, hundredth);
+
+        time.text = curTime;
     }
 }
