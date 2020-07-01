@@ -19,6 +19,7 @@ public class Trunk : MonoBehaviour
         gameObject.transform.SetParent(null);
         //Return to an out off frustrum position to wait for pool call
         gameObject.transform.position = new Vector3(0f, -50f, 0f);
+        gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
         gameObject.SetActive(false);
     }
 }
